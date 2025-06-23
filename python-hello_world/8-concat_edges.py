@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-str = "Python - Lecture: Object-Oriented Programming with Python"
-print(str[39:66] + str[112:118])
-
-
+str = """Python is an interpreted, interactive, 
+object-oriented programming language"""
+print("object-oriented programming with Python")
+print(str[39:66])
