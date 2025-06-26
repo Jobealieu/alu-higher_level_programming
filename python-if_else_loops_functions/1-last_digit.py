@@ -2,8 +2,11 @@
 import random
 number = random.randint(-10000, 10000)
 
-# Get the last digit
-last_digit = number % 10
+# Get the last digit - handle negative numbers correctly
+if number < 0:
+    last_digit = -1 * (abs(number) % 10)
+else:
+    last_digit = number % 10
 
 # Print the required message based on the last digit
 print(f"Last digit of {number} is {last_digit}", end="")
