@@ -2,9 +2,8 @@
 import sys
 
 if __name__ == "__main__":
-    # Get the number of arguments (excluding the script name)
     argc = len(sys.argv) - 1
-    
+
     if argc == 0:
         print("0 arguments.")
     elif argc == 1:
