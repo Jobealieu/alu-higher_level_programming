@@ -1,6 +1,9 @@
 #!/usr/bin/python3
+"""Module defining LockedClass"""
+
+
 class LockedClass:
-    def __setattr__(self, name, value):
-        if name != 'first_name':
-            raise AttributeError("'LockedClass' object has no attribute '{}'".format(name))
-        super().__setattr__(name, value)
+    """A class that prevents dynamic creation of instance attributes
+    except for 'first_name'"""
+    
+    __slots__ = ['first_name']
