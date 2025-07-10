@@ -1,4 +1,4 @@
 #!/usr/bin/python3
-def magic_string(storage=[]):
-    storage.append("BestSchool")
-    return ", ".join(storage)
+def magic_string(counter=[0]):
+    counter[0] += 1
+    return ", ".join(["BestSchool"] * counter[0])
