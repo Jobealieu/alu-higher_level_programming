@@ -1,9 +1,12 @@
+#!/usr/bin/python3
 # 11-square.py
 
 from rectangle import Rectangle
 
 
 class Square(Rectangle):
+    """Class that defines a square inheriting from Rectangle."""
+    
     def __init__(self, size):
         """Initialize a Square instance."""
         self.integer_validator("size", size)
