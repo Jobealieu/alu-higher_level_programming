@@ -1,62 +1,72 @@
 #!/usr/bin/python3
 """
-Script that reads stdin line by line and computes metrics
+Log parsing script that reads stdin line by line and computes metrics.
+Prints statistics every 10 lines and on keyboard interrupt (CTRL+C).
 """
 
 import sys
+import signal
 
 
 def print_stats(total_size, status_counts):
-    """Print the current statistics"""
+    """Print the current statistics."""
     print("File size: {}".format(total_size))
-    for status in sorted(status_counts.keys()):
-        if status_counts[status] > 0:
-            print("{}: {}".format(status, status_counts[status]))
+
+    # Print status codes in ascending order
+    valid_codes = [200, 301, 400, 401, 403, 404, 405, 500]
+    for code in valid_codes:
+        if code in status_counts and status_counts[code] > 0:
+            print("{}: {}".format(code, status_counts[code]))
 
 
-def parse_line(line):
-    """Parse a log line and return status code and file size if valid"""
-    try:
-        parts = line.split()
-        if len(parts) < 7:
-            return None, None
-        
-        if (parts[1] != "-" or
-                not parts[2].startswith("[") or
-                not parts[5].endswith('"') or
-                parts[3] != '"GET' or
-                parts[4] != '/projects/260' or
-                parts[5] != 'HTTP/1.1"'):
-            return None, None
-        
-        status_code = int(parts[6])
-        file_size = int(parts[7])
-        
-        return status_code, file_size
-    except (ValueError, IndexError):
-        return None, None
+def signal_handler(signum, frame):
+    """Handle keyboard interrupt (CTRL+C)."""
+    print_stats(total_size, status_counts)
+    sys.exit(0)
 
 
+# Initialize variables
 total_size = 0
-status_counts = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
+status_counts = {}
 line_count = 0
+
+# Set up signal handler for CTRL+C
+signal.signal(signal.SIGINT, signal_handler)
 
 try:
     for line in sys.stdin:
         line = line.strip()
-        
-        status_code, file_size = parse_line(line)
-        
-        if status_code is not None and file_size is not None:
-            total_size += file_size
-            
-            if status_code in status_counts:
-                status_counts[status_code] += 1
-            
-            line_count += 1
-            
-            if line_count % 10 == 0:
-                print_stats(total_size, status_counts)
+        if not line:
+            continue
 
+        # Parse the log line
+        # Format: <IP> - [<date>] "GET /projects/260 HTTP/1.1" <status> <size>
+        try:
+            # Split the line to extract status code and file size
+            parts = line.split()
+            if len(parts) >= 2:
+                status_code = int(parts[-2])  # Second to last element
+                file_size = int(parts[-1])    # Last element
+
+                # Update total file size
+                total_size += file_size
+
+                # Update status code count (only for valid codes)
+                valid_codes = [200, 301, 400, 401, 403, 404, 405, 500]
+                if status_code in valid_codes:
+                    status_counts[status_code] = status_counts.get(
+                        status_code, 0) + 1
+
+                line_count += 1
+
+                # Print stats every 10 lines
+                if line_count % 10 == 0:
+                    print_stats(total_size, status_counts)
+
+        except (ValueError, IndexError):
+            # Skip malformed lines
+            continue
+            
 except KeyboardInterrupt:
+    # This should be handled by the signal handler, but just in case
     print_stats(total_size, status_counts)
