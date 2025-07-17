@@ -1,5 +1,12 @@
+#!/usr/bin/python3
 import re
 import sys
+
+def print_stats(total_size, status_counts):
+    """Print current statistics"""
+    print(f"File size: {total_size}")
+    for status_code in sorted(status_counts.keys()):
+        print(f"{status_code}: {status_counts[status_code]}")
 
 def parse_log_line(line):
     """Parse a log line and return (status_code, file_size) or None if invalid"""
@@ -46,8 +53,3 @@ except KeyboardInterrupt:
     pass
 finally:
     print_stats(total_size, status_counts)
-
-def print_stats(total_size, status_counts):
-    print(f"File size: {total_size}")
-    for status_code in sorted(status_counts.keys()):
-        print(f"{status_code}: {status_counts[status_code]}")
