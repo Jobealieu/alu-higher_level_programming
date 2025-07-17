@@ -24,21 +24,36 @@ def main():
 
     try:
         for line in sys.stdin:
+            line = line.strip()
+            if not line:
+                continue
+            
             try:
+                # Expected format: 
+                # <IP> - [<date>] "GET /projects/260 HTTP/1.1" <status> <size>
                 parts = line.split()
-                if len(parts) >= 7:
-                    status_code = int(parts[-2])
-                    file_size = int(parts[-1])
-
+                
+                # Check if line has enough parts
+                if len(parts) < 7:
+                    continue
+                
+                # Check if the request method part is correct
+                if len(parts) >= 6 and parts[5] == '"GET' and \
+                   parts[6] == '/projects/260' and parts[7] == 'HTTP/1.1"':
+                    
+                    status_code = int(parts[8])
+                    file_size = int(parts[9])
+                    
                     total_size += file_size
-
+                    
                     if status_code in status_counts:
                         status_counts[status_code] += 1
-
+                    
                     line_count += 1
-
+                    
                     if line_count % 10 == 0:
                         print_stats(total_size, status_counts)
+                        
             except (ValueError, IndexError):
                 continue
 
