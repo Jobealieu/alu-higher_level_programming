@@ -24,31 +24,21 @@ def main():
 
     try:
         for line in sys.stdin:
-            line = line.strip()
-            
             try:
-                # Split by quotes to handle the HTTP request part
-                if '"GET /projects/260 HTTP/1.1"' in line:
-                    # Find the part after the quoted HTTP request
-                    quote_end = line.find('"GET /projects/260 HTTP/1.1"')
-                    if quote_end != -1:
-                        after_quote = line[quote_end + 27:].strip()
-                        parts = after_quote.split()
-                        
-                        if len(parts) >= 2:
-                            status_code = int(parts[0])
-                            file_size = int(parts[1])
-                            
-                            total_size += file_size
-                            
-                            if status_code in status_counts:
-                                status_counts[status_code] += 1
-                            
-                            line_count += 1
-                            
-                            if line_count % 10 == 0:
-                                print_stats(total_size, status_counts)
-                                
+                parts = line.split()
+                if len(parts) >= 7:
+                    status_code = int(parts[-2])
+                    file_size = int(parts[-1])
+
+                    total_size += file_size
+
+                    if status_code in status_counts:
+                        status_counts[status_code] += 1
+
+                    line_count += 1
+
+                    if line_count % 10 == 0:
+                        print_stats(total_size, status_counts)
             except (ValueError, IndexError):
                 continue
 
