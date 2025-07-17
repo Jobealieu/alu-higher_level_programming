@@ -2,16 +2,19 @@
 import re
 import sys
 
+
 def print_stats(total_size, status_counts):
     """Print current statistics"""
-    print(f"File size: {total_size}")
+    print("File size: {}".format(total_size))
     for status_code in sorted(status_counts.keys()):
-        print(f"{status_code}: {status_counts[status_code]}")
+        print("{}: {}".format(status_code, status_counts[status_code]))
+
 
 def parse_log_line(line):
     """Parse a log line and return (status_code, file_size) or None if invalid"""
     # Regex pattern for the exact format required
-    pattern = r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - \[.*\] "GET /projects/260 HTTP/1\.1" (\d+) (\d+)$'
+    pattern = (r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - \[.*\] '
+               r'"GET /projects/260 HTTP/1\.1" (\d+) (\d+)$')
     
     match = re.match(pattern, line.strip())
     if not match:
@@ -31,6 +34,7 @@ def parse_log_line(line):
         return None
     
     return int(status_code), int(file_size)
+
 
 # Main processing logic
 total_size = 0
