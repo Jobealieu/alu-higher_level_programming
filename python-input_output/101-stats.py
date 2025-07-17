@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-Script that reads stdin line by line and computes metrics
-"""
+"""Script that reads stdin line by line and computes metrics"""
 import sys
 
 
@@ -47,10 +45,11 @@ def main():
                             # Print stats every 10 lines
                             if line_count % 10 == 0:
                                 print_stats(total_size, status_counts)
+                                
             except (ValueError, IndexError):
                 # Skip lines with wrong format
                 continue
-    
+                
     except KeyboardInterrupt:
         pass
     finally:
