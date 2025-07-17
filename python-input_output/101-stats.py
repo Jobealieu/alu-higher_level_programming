@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""Script that reads stdin line by line and computes metrics"""
+"""
+Script that reads stdin line by line and computes metrics
+"""
 import sys
 
 
@@ -12,53 +14,46 @@ def print_stats(total_size, status_counts):
 
 
 def main():
+    """Main function to process stdin and compute metrics"""
     total_size = 0
-    status_counts = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0,
-                     405: 0, 500: 0}
-    line_count = 0
-    
+    status_counts = {
+        200: 0, 301: 0, 400: 0, 401: 0,
+        403: 0, 404: 0, 405: 0, 500: 0
+    }
+    line_count = 0  # Counts ALL lines (valid + invalid)
+
     try:
         for line in sys.stdin:
-            line = line.strip()
-            if not line:
-                continue
-                
-            # Parse the line manually to handle wrong format gracefully
+            line_count += 1  # Count every input line
+
             try:
-                # Split by quotes to get the method part
-                parts = line.split('"')
-                if len(parts) >= 3:
-                    # Check if middle part contains a valid HTTP request
-                    request_part = parts[1]
-                    if (request_part.startswith("GET ") and
-                            request_part.endswith(" HTTP/1.1")):
-                        # Split the last part to get status code and file size
-                        after_quote = parts[2].strip().split()
-                        if len(after_quote) >= 2:
-                            status_code = int(after_quote[0])
-                            file_size = int(after_quote[1])
-                            
-                            # Update total file size
-                            total_size += file_size
-                            
-                            # Update status code count if valid
-                            if status_code in status_counts:
-                                status_counts[status_code] += 1
-                            
-                            line_count += 1
-                            
-                            # Print stats every 10 lines
-                            if line_count % 10 == 0:
-                                print_stats(total_size, status_counts)
-                                
+                parts = line.split()
+                # Validate minimum components exist
+                if len(parts) < 7:
+                    continue
+
+                # Attempt to parse status code and file size
+                status_code = int(parts[-2])
+                file_size = int(parts[-1])
+
+                # Update metrics if valid
+                total_size += file_size
+                if status_code in status_counts:
+                    status_counts[status_code] += 1
+
             except (ValueError, IndexError):
-                # Skip lines with wrong format
+                # Skip metric updates but keep line count
                 continue
-                
+
+            # Print after every 10 input lines
+            if line_count % 10 == 0:
+                print_stats(total_size, status_counts)
+
     except KeyboardInterrupt:
+        # Allow print on CTRL+C via finally block
         pass
     finally:
-        # Print final stats
+        # Final print (last set of metrics)
         print_stats(total_size, status_counts)
 
 
