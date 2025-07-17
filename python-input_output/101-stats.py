@@ -1,75 +1,52 @@
 #!/usr/bin/python3
 """
-Log parsing script that reads stdin line by line and computes metrics.
-Prints statistics every 10 lines and on keyboard interruption.
+Script that reads stdin line by line and computes metrics
 """
-
 import sys
-import signal
 
 
 def print_stats(total_size, status_counts):
-    """Print the current statistics."""
+    """Print current statistics"""
     print("File size: {}".format(total_size))
-
-    # Print status codes in ascending order
-    valid_codes = [200, 301, 400, 401, 403, 404, 405, 500]
-    for code in valid_codes:
-        if code in status_counts and status_counts[code] > 0:
-            print("{}: {}".format(code, status_counts[code]))
+    for status in sorted(status_counts.keys()):
+        if status_counts[status] > 0:
+            print("{}: {}".format(status, status_counts[status]))
 
 
-def signal_handler(signum, frame):
-    """Handle keyboard interruption (CTRL+C)."""
-    print_stats(total_size, status_counts)
-    sys.exit(0)
+def main():
+    """Main function to process stdin and compute metrics"""
+    total_size = 0
+    status_counts = {
+        200: 0, 301: 0, 400: 0, 401: 0,
+        403: 0, 404: 0, 405: 0, 500: 0
+    }
+    line_count = 0
+
+    try:
+        for line in sys.stdin:
+            try:
+                parts = line.split()
+                if len(parts) >= 7:
+                    status_code = int(parts[-2])
+                    file_size = int(parts[-1])
+
+                    total_size += file_size
+
+                    if status_code in status_counts:
+                        status_counts[status_code] += 1
+
+                    line_count += 1
+
+                    if line_count % 10 == 0:
+                        print_stats(total_size, status_counts)
+            except (ValueError, IndexError):
+                continue
+
+    except KeyboardInterrupt:
+        pass
+    finally:
+        print_stats(total_size, status_counts)
 
 
-# Initialize global variables
-total_size = 0
-status_counts = {}
-line_count = 0
-
-# Set up signal handler for CTRL+C
-signal.signal(signal.SIGINT, signal_handler)
-
-try:
-    for line in sys.stdin:
-        line = line.strip()
-        if not line:
-            continue
-
-        try:
-            # Parse the log line
-            # Format: <IP> - [<date>] "GET /projects/260 HTTP/1.1" <status> <size>
-            parts = line.split()
-
-            # Extract status code and file size
-            # Status code is the second to last part, file size is the last part
-            if len(parts) >= 2:
-                status_code = int(parts[-2])
-                file_size = int(parts[-1])
-
-                # Update totals
-                total_size += file_size
-
-                # Update status code count
-                if status_code in status_counts:
-                    status_counts[status_code] += 1
-                else:
-                    status_counts[status_code] = 1
-
-        except (ValueError, IndexError):
-            # Skip invalid lines
-            continue
-
-        line_count += 1
-
-        # Print stats every 10 lines
-        if line_count % 10 == 0:
-            print_stats(total_size, status_counts)
-
-except KeyboardInterrupt:
-    print_stats(total_size, status_counts)
-    sys.exit(0)
-
+if __name__ == "__main__":
+    main()
