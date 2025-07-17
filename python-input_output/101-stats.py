@@ -13,20 +13,25 @@ def print_stats(total_size, status_counts):
 
 def main():
     total_size = 0
-    status_counts = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
+    status_counts = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0,
+                     405: 0, 500: 0}
     line_count = 0
     
     try:
         for line in sys.stdin:
             line = line.strip()
-            
+            if not line:
+                continue
+                
             # Parse the line manually to handle wrong format gracefully
             try:
                 # Split by quotes to get the method part
                 parts = line.split('"')
                 if len(parts) >= 3:
-                    # Check if middle part is the expected GET request
-                    if parts[1] == "GET /projects/260 HTTP/1.1":
+                    # Check if middle part contains a valid HTTP request
+                    request_part = parts[1]
+                    if (request_part.startswith("GET ") and
+                            request_part.endswith(" HTTP/1.1")):
                         # Split the last part to get status code and file size
                         after_quote = parts[2].strip().split()
                         if len(after_quote) >= 2:
