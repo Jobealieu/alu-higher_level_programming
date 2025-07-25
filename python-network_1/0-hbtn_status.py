@@ -1,17 +1,12 @@
 #!/usr/bin/python3
-"""Fetches the status of a given URL using urllib."""
+"""Fetches a URL's status using urllib package and displays response details."""
 import urllib.request
-def fetch_status(url):
-    """Fetches and prints the status of the given URL."""
+
+if __name__ == "__main__":
+    url = "http://0.0.0.0:5050/status"
     with urllib.request.urlopen(url) as response:
         body = response.read()
-        
         print("Body response:")
-        print(f"\t- type: {type(body)}")
-        print(f"\t- content: {body}")
-        print(f"\t- utf8 content: {body.decode('utf-8')}")
-if __name__ == "__main__":
-    # Fetching the status from the specified URL
-    fetch_status("https://intranet.hbtn.io/status")
-    # Uncomment the line below to fetch from the alternative URL
-    # fetch_status("http://0.0.0.0:5050/status")
+        print("\t- type: {}".format(type(body)))
+        print("\t- content: {}".format(body))
+        print("\t- utf8 content: {}".format(body.decode('utf-8')))
