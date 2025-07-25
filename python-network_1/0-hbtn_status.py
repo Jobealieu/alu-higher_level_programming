@@ -1,16 +1,24 @@
 #!/usr/bin/python3
+"""
+0-hbtn_status.py
+
+Fetches https://alu-intranet.hbtn.io/status using urllib
+and displays the body response in a formatted way.
+"""
+
 import urllib.request
 
-def fetch_page_content():
-    try:
-        with urllib.request.urlopen('https://alu-higher_level_programming.holberton.co/status') as response:
-            body = response.read()
-            print("Body response:")
-            print(f"    - type: {type(body)}")
-            print(f"    - content: {body}")
-            print(f"    - utf8 content: {body.decode('utf-8')}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+def main():
+    url = "https://alu-intranet.hbtn.io/status"
+    # Using with statement to open the URL and get the response object
+    with urllib.request.urlopen(url) as response:
+        body = response.read()
+
+    # Printing outputs as per requirement
+    print("Body response:")
+    print("\t- type: {}".format(type(body)))
+    print("\t- content: {}".format(body))
+    print("\t- utf8 content: {}".format(body.decode('utf-8')))
 
 if __name__ == "__main__":
-    fetch_page_content()
+    main()
