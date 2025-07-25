@@ -1,10 +1,11 @@
 #!/usr/bin/python3
-"""Fetches a URL's status using urllib package and displays response details."""
+"""A script that fetches https://intranet.hbtn.io/status using urllib"""
 import urllib.request
 
+
 if __name__ == "__main__":
-    url = "https://intranet.hbtn.io/status"
-    with urllib.request.urlopen(url) as response:
+    req = urllib.request.Request('https://intranet.hbtn.io/status')
+    with urllib.request.urlopen(req) as response:
         body = response.read()
         print("Body response:")
         print("\t- type: {}".format(type(body)))
