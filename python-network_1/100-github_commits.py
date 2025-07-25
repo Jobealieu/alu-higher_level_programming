@@ -9,15 +9,15 @@ import sys
 if __name__ == "__main__":
     repo_name = sys.argv[1]
     owner_name = sys.argv[2]
-    
+
     url = "https://api.github.com/repos/{}/{}/commits".format(
         owner_name, repo_name)
-    
+
     response = requests.get(url)
-    
+
     if response.status_code == 200:
         commits = response.json()
-        
+
         # Get the first 10 commits (most recent)
         for commit in commits[:10]:
             sha = commit['sha']
