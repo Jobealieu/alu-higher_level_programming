@@ -1,3 +1,3 @@
 #!/bin/bash
-# This script makes a request to catch the server and get "You got me!" response
-curl -s -X GET "0.0.0.0:5000/catch_me" -H "X-School: 98"
+# This script makes a request to the server to catch a message
+curl -s -X PUT -H "Content-Type: application/json" -d '{"message": "You got me!"}' 0.0.0.0:5000/catch_me
