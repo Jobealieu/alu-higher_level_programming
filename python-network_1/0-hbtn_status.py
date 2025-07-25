@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 """
-Script that fetches https://alu-intranet.hbtn.io/status using urllib
+This module fetches a URL and displays information about the response body.
 """
+import urllib.request
+
 
 if __name__ == "__main__":
-    import urllib.request
-
-    url = "https://alu-intranet.hbtn.io/status"
-    
-    with urllib.request.urlopen(url) as response:
+    with urllib.request.urlopen('https://alu-intranet.hbtn.io/status') as response:
         body = response.read()
         print("Body response:")
         print("\t- type: {}".format(type(body)))
