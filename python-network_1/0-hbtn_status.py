@@ -13,3 +13,5 @@ def fetch_status(url):
 if __name__ == "__main__":
     # Fetching the status from the specified URL
     fetch_status("https://intranet.hbtn.io/status")
+    # Uncomment the line below to fetch from the alternative URL
+    # fetch_status("http://0.0.0.0:5050/status")
