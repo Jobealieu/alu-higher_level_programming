@@ -3,15 +3,12 @@
 -- Results are sorted in ascending order by the show title
 -- Uses a maximum of two SELECT statements
 
-SELECT tv_shows.title
+SELECT title
 FROM tv_shows
-WHERE tv_shows.id NOT IN (
+WHERE id NOT IN (
     SELECT tv_show_genres.tv_show_id
     FROM tv_show_genres
-    WHERE tv_show_genres.genre_id = (
-        SELECT id
-        FROM tv_genres
-        WHERE name = 'Comedy'
-    )
+    JOIN tv_genres ON tv_show_genres.genre_id = tv_genres.id
+    WHERE tv_genres.name = 'Comedy'
 )
-ORDER BY tv_shows.title;
+ORDER BY title;
