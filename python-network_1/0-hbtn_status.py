@@ -1,14 +1,15 @@
 #!/usr/bin/python3
-"""Script that fetches a URL status"""
-import sys
+"""Fetches the status of a given URL using urllib."""
 import urllib.request
-
-
-if __name__ == "__main__":
-    url = sys.argv[1] if len(sys.argv) > 1 else "https://alu-intranet.hbtn.io/status"
+def fetch_status(url):
+    """Fetches and prints the status of the given URL."""
     with urllib.request.urlopen(url) as response:
         body = response.read()
+        
         print("Body response:")
-        print("\t- type: {}".format(type(body)))
-        print("\t- content: {}".format(body))
-        print("\t- utf8 content: {}".format(body.decode("utf-8")))
+        print(f"\t- type: {type(body)}")
+        print(f"\t- content: {body}")
+        print(f"\t- utf8 content: {body.decode('utf-8')}")
+if __name__ == "__main__":
+    # Fetching the status from the specified URL
+    fetch_status("https://intranet.hbtn.io/status")
