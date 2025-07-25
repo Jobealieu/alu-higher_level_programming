@@ -1,15 +1,16 @@
 #!/usr/bin/python3
-"""
-Script that takes in a URL, sends a request to the URL, and displays
-the value of the X-Request-Id variable found in the header of the response.
-"""
-
 import urllib.request
-import sys
+
+def fetch_page_content():
+    try:
+        with urllib.request.urlopen('https://alu-higher_level_programming.holberton.co/status') as response:
+            body = response.read()
+            print("Body response:")
+            print(f"    - type: {type(body)}")
+            print(f"    - content: {body}")
+            print(f"    - utf8 content: {body.decode('utf-8')}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
-    url = sys.argv[1]
-
-    with urllib.request.urlopen(url) as response:
-        x_request_id = response.headers.get('X-Request-Id')
-        print(x_request_id)
+    fetch_page_content()
