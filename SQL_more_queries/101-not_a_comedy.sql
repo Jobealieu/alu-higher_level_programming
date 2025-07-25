@@ -1,3 +1,8 @@
+-- Script that lists all shows without the genre Comedy in the database hbtn_0d_tvshows
+-- Each record displays: tv_shows.title
+-- Results are sorted in ascending order by the show title
+-- Uses a maximum of two SELECT statements
+
 SELECT tv_shows.title
 FROM tv_shows
 WHERE tv_shows.id NOT IN (
