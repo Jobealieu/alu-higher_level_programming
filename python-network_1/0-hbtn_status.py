@@ -1,18 +1,13 @@
 #!/usr/bin/python3
-"""Module 0-hbtn_status.py"""
+"""Fetches https://alu-intranet.hbtn.io/status using urllib package."""
 import urllib.request
 
-url = 'https://intranet.hbtn.io/status'
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-    '\n    AppleWebKit/537.36 (KHTML, like Gecko)'
-    '\n    Chrome/99.0.4844.84 Safari/537.36',
-}
 
-req = urllib.request.Request(url, headers=headers)
-with urllib.request.urlopen(req) as response:
-    content = response.read()
-    print("Body response:")
-    print("\t- type:", type(content))
-    print("\t- content:", content)
-    print("\t- utf8 content:", content.decode("utf-8"))
+if __name__ == "__main__":
+    url = 'https://alu-intranet.hbtn.io/status'
+    with urllib.request.urlopen(url) as response:
+        body = response.read()
+        print("Body response:")
+        print(" - type: {}".format(type(body)))
+        print(" - content: {}".format(body))
+        print(" - utf8 content: {}".format(body.decode('utf-8')))
