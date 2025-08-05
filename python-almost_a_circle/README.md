@@ -153,7 +153,3 @@ This project demonstrates understanding of:
 Author
 Alieu O. Jobe
 ALU Higher Level Programming
-
-Repository Information
-	* GitHub Repository: alu-higher_level_programming
-	* Directory: python-almost_a_circle
