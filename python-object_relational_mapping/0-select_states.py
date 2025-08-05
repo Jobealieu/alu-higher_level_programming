@@ -15,20 +15,21 @@ if __name__ == "__main__":
         passwd=sys.argv[2],
         db=sys.argv[3]
     )
-    
+
     # Create cursor object
     cursor = db.cursor()
-    
-    # Execute query to get states starting with 'N'
-    cursor.execute("SELECT * FROM states WHERE name LIKE 'N%' ORDER BY id ASC")
-    
+
+    # Execute query to get states starting with 'N' (case sensitive)
+    cursor.execute("SELECT * FROM states WHERE name LIKE BINARY 'N%' "
+                   "ORDER BY id ASC")
+
     # Fetch all matching records
     results = cursor.fetchall()
-    
+
     # Print each result
     for row in results:
         print(row)
-    
+
     # Close cursor and database connection
     cursor.close()
     db.close()
