@@ -248,9 +248,3 @@ The project includes various test scenarios:
 ## 👨‍💻 Author
 
 **Alieu O. Jobe**
-- ALU Higher Level Programming Project
-- Python Object-Relational Mapping
-
----
-
-*This project is part of the ALU Higher Level Programming curriculum, focusing on the integration of Python with database systems through both direct SQL execution and Object-Relational Mapping techniques.*
