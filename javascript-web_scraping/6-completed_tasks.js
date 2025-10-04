@@ -1,20 +1,25 @@
 #!/usr/bin/node
-// Script that gets the contents of a webpage and stores it in a file
-
 const request = require('request');
-const fs = require('fs');
 
 const url = process.argv[2];
-const filePath = process.argv[3];
 
 request(url, (error, response, body) => {
   if (error) {
     console.error(error);
   } else {
-    fs.writeFile(filePath, body, 'utf-8', (err) => {
-      if (err) {
-        console.error(err);
+    const todos = JSON.parse(body);
+    const completedTasks = {};
+
+    for (const task of todos) {
+      if (task.completed === true) {
+        if (completedTasks[task.userId] === undefined) {
+          completedTasks[task.userId] = 1;
+        } else {
+          completedTasks[task.userId] += 1;
+        }
       }
-    });
+    }
+
+    console.log(completedTasks);
   }
 });
